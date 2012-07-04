@@ -1,4 +1,4 @@
-#summary Terms of CGITA for users and developers
+#summary 1. Terms of CGITA for users and developers
 #labels Must-read
 
 = Introduction =
