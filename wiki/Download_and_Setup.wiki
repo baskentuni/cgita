@@ -1,4 +1,4 @@
-#summary 2.Instruction of CGITA for download and setup
+#summary 2. Instruction of CGITA for download and setup
 
 = Introduction =
 
