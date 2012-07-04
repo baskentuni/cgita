@@ -6,16 +6,16 @@ Please leave your name and institution if you are a CGITA user. This guest book 
 
 Click the 'Edit' button. Paste the following text by the end of 'Content'. 
 
-*=== Your name. Your institution ===*
+*=== Your name. Your institution. Website ===*
 
 *----*
 
 
-And then modify the 'Your name. Your institution' part by filling in your information. 
+And then modify the 'Your name. Your institution. Website' part by filling in your information. 
 
 = Guest book = 
 
-==== Yu-Hua Dean Fang, PhD. Molecular Imaging Center, Chang-Gung Memorial Hospital, Taiwan http://www1.cgmh.org.tw/lnkmic/e/about.html ====
+==== Yu-Hua Dean Fang, PhD. Molecular Imaging Center, Chang-Gung Memorial Hospital, Taiwan. http://www1.cgmh.org.tw/lnkmic/e/about.html ====
 ----
 ==== Nai-Ming Cheng, MD. Department of Nuclear Medicine, Chang-Gung Memorial Hospital, Taiwan ====
 ----
