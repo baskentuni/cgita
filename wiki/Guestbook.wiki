@@ -15,7 +15,7 @@ And then modify the 'Your name. Your institution' part by filling in your inform
 
 = Guest book = 
 
-==== Yu-Hua Dean Fang, PhD. Molecular Imaging Center, Chang-Gung Memorial Hospital, Taiwan ====
+==== Yu-Hua Dean Fang, PhD. Molecular Imaging Center, Chang-Gung Memorial Hospital, Taiwan http://www1.cgmh.org.tw/lnkmic/e/about.html ====
 ----
 ==== Nai-Ming Cheng, MD. Department of Nuclear Medicine, Chang-Gung Memorial Hospital, Taiwan ====
 ----
