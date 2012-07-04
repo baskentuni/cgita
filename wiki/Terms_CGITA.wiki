@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Terms of CGITA for users and developers
 
 = Introduction =
 
