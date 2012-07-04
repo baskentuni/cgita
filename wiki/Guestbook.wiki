@@ -16,7 +16,7 @@ Click the 'Edit' button. Paste the following text by the end of 'Content'.
 And then modify the 'Your name. Your institution' part by filling in your information. 
 
 = Guest book = 
-=== Yu-Hua Dean Fang, PhD. Molecular Imaging Center, Chang-Gung Memorial Hospital ===
+=== Yu-Hua Dean Fang, PhD. Molecular Imaging Center, Chang-Gung Memorial Hospital, Taiwan ===
 ----
-=== Nai-Ming Cheng, MD. Department of Nuclear Medicine, Chang-Gung Memorial Hospital ===
+=== Nai-Ming Cheng, MD. Department of Nuclear Medicine, Chang-Gung Memorial Hospital, Taiwan ===
 ----
