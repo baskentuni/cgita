@@ -1,4 +1,4 @@
-#Contact information of the CGITA project
+#summary Contact information of the CGITA project
 
 = Introduction =
 
