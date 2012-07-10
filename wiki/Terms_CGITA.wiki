@@ -1,4 +1,4 @@
-#summary 1. Terms of CGITA for users and developers
+#summary Terms of CGITA for users and developers
 
 = Terms of CGITA =
 
