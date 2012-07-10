@@ -1,4 +1,4 @@
-#summary 5. CGITA guestbook
+#summary CGITA guestbook
 = Introduction =
 
 Please leave your name and institution if you are a CGITA user. This guest book will be a great encouragement for us. 
