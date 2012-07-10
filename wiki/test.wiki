@@ -4,7 +4,7 @@
 
 Add your content here.
 
-[test.png]
+[test.png test.png]
 
 = Details =
 
