@@ -4,6 +4,7 @@
 
 Add your content here.
 
+http://code.google.com/p/cgita/wiki/test.png
 
 = Details =
 
