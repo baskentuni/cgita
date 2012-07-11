@@ -13,3 +13,5 @@ CGITA is open-source and free for academic research use. The terms of CGITA can 
 CGITA is developed as a MATLAB toolbox. However, it has its own user interface. You may use it under MATLAB, or as a standalone application. For the standalone application, you do not need a MATLAB license to run CGITA. Detailed installation guide can be found [UserManual here].
 
 To run CGITA as a standalone application, you need to download MATLAB Compiler Runtime (MCR) at [http://www.mathworks.com/products/compiler/mcr/index.html here].
+
+https://docs.google.com/open?id=0BwD88sxlH3JfYVBsMFhIM01wWms
