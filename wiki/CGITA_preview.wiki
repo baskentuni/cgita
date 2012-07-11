@@ -14,4 +14,4 @@ CGITA is developed as a MATLAB toolbox. However, it has its own user interface. 
 
 To run CGITA as a standalone application, you need to download MATLAB Compiler Runtime (MCR) at [http://www.mathworks.com/products/compiler/mcr/index.html here].
 
-[https://docs.google.com/open?id=0BwD88sxlH3JfYVBsMFhIM01wWms screen shot]
+[http://code.google.com/images/CGITA_screen.png screen shot]
