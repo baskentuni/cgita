@@ -1,0 +1,25 @@
+#
+# DICOM Data Dictionary
+#
+# Copyright 2000-2007 The MathWorks, Inc.
+# $Revision$  $Date$
+#
+# ------------------------------------------------------------------------
+# Attributes can appear multiple times.  The last duplicate entry is the
+# one which is used.
+#
+# Comment lines begin with "#".
+#
+# Items are tab-delimited.
+# ------------------------------------------------------------------------
+
+
+(0008,1030)	LO	StudyDescription	1
+(0008,0031)	TM	SeriesTime	1
+(0008,0020)	DA	StudyDate	1
+(0008,103E)	LO	SeriesDescription	1
+(0020,0010)	SH	StudyID	1
+(0010,0020)	LO	PatientID	1
+(0010,0010)	PN	PatientName	1
+(0008,0060)	CS	Modality	1
+(0008,2127)	SH	ViewName	1

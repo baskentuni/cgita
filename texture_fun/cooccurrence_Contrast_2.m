@@ -1,0 +1,25 @@
+function feature_output = coocurrance_Contrast_2(varargin)
+% Tesar paper. This is equal to dissimilarity!!
+global glcm_global
+
+if exist('glcm_global')==1
+    
+    feature_output = 0;
+    for idx1 = 1:size(glcm_global,1)
+        for idx2 = 1:size(glcm_global,2)
+            feature_output = feature_output + glcm_global(idx1, idx2)*abs(idx1-idx2);
+        end
+    end
+    
+    
+%     tempvar = graycoprops(glcm_global);
+%     matlab_contrast = tempvar.Contrast;
+%     if abs(matlab_contrast*sum(glcm_global(:)) - feature_output) > abs(feature_output*10-5)
+%         warning('Matlab has a different value.');
+%     end
+    
+else
+    error('The GLCM must be computed first');
+end
+
+return;
