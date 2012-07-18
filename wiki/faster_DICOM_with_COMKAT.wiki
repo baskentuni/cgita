@@ -15,4 +15,3 @@ First, go to the [http://comkat.case.edu COMKAT website] to get COMKAT.
 Under the COMKAT root folder, go to the 'ComkatImageTool' folder. Copy the files 'dcmreadfile.mexw32' and 'dcmreadfile.mexw64'. 
 
 Paste these two files under the 'image_fun' folder. 
-
