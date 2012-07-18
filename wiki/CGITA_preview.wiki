@@ -18,7 +18,7 @@ To run CGITA as a standalone application, you need to download MATLAB Compiler R
 
 CGITA has an graphical user interface (GUI). Also it comes with many command-line functions. CGITA screen shot:
 
-http://cgita.googlecode.com/files/screen3.png
+<img src="http://cgita.googlecode.com/svn/wiki/screen3.png" alt="Pulpit rock" width="450" height="330" border = "5" align = "right"/> 
 
 = Supported textural features = 
 
