@@ -1,4 +1,5 @@
 #summary Terms of CGITA for users and developers
+#sidebar TableOfContents
 
 = Terms of CGITA =
 
