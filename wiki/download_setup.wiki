@@ -1,4 +1,5 @@
 #summary Quick-start for CGITA
+#sidebar TableOfContents
 === Introduction ===
 This is a guide to show you how to download and set up CGITA. For description of CGITA features, refer to [CGITA_preview this page].
 
