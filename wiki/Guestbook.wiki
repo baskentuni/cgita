@@ -1,4 +1,5 @@
 #summary CGITA guestbook
+#sidebar TableOfContents
 = Let us know what you think of CGITA! =
 == We would like to know how you think of CGITA. ==
 == So please leave your thoughts, comments, suggestions, etc... on this page. == 
