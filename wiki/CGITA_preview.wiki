@@ -1,4 +1,5 @@
 #summary Preview of CGITA
+#sidebar TableOfContents
 
 = Introduction =
 
