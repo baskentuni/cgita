@@ -1,5 +1,10 @@
-  * [CGITA_preview CGITA features]
-  * [download_setup Guide for download and setup]
-  * [Terms_CGITA CGITA terms]
-  * [Guestbook  Guestbook]
-  * [UserManual User manual in PDF]
+  * *Quick-start*
+    * [CGITA_preview CGITA features]
+    * [download_setup Guide for download and setup]
+  * *Important message*
+    * [Terms_CGITA CGITA terms]
+  * *Documents*
+    * [UserManual User manual in PDF]
+  * *Feedback*
+    * [Guestbook  Guestbook]
+  
