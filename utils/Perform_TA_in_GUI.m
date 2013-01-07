@@ -17,7 +17,7 @@ n_parent = length(feature_structure);
 
 Feature_table = {};
 
-h = msgbox('Computing the textural features. Please wait...');
+
 
 Feature_display_cell = {'Feature Parent' 'Feature Name'};
 
@@ -34,6 +34,15 @@ end
 
 table_column_now_idx = 2;
 
+if length(handles.image_vol_for_TA)==1
+    total_steps = length(handles.image_vol_for_TA{1});
+else
+    total_steps = length(handles.image_vol_for_TA{1})+length(handles.image_vol_for_TA{2});
+end;
+
+h = waitbar(0,'Performing the texture analysis. Please wait...');
+counter = 0;
+timing_n = 10;
 for idx_img_set = 1:n_img_set
     % Check for the number of image sets
     n_voi_this_set = length(handles.image_vol_for_TA{idx_img_set});
@@ -43,6 +52,15 @@ for idx_img_set = 1:n_img_set
         now_img_obj = handles.Fusion_image_obj;
     end
     for idx_voi = 1:n_voi_this_set
+        counter = counter+1;
+        if mod(counter, timing_n) == 0
+            waitbar(counter/total_steps);
+        end
+        if isempty(handles.mask_vol_for_TA{idx_img_set}{idx_voi})
+            empty_flag = 1;
+        else
+            empty_flag = 0;
+        end
         table_column_now_idx = table_column_now_idx + 1;
         
         table_row_now_idx = 1;
@@ -58,6 +76,12 @@ for idx_img_set = 1:n_img_set
                     parent_fcn_is_the_same = false;
                 end
             end
+            if empty_flag == 1
+                for idx_feature = 1:n_features_in_parent
+                    table_row_now_idx = table_row_now_idx+1;
+                    Feature_display_cell{table_row_now_idx, table_column_now_idx} = 'NaN';
+                end
+            else
             if  parent_fcn_is_the_same && (exist(parent_function_name)>0)
                 display(['Evaluating parent function: ' parent_function_name]);
                 feval(parent_function_name, handles.image_vol_for_TA{idx_img_set}{idx_voi}, ...
@@ -99,6 +123,7 @@ for idx_img_set = 1:n_img_set
                 end
                 
                 Feature_display_cell{table_row_now_idx, table_column_now_idx} = Feature_table{idx_img_set}{idx_voi}{idx_parent}{idx_feature}{2};
+            end
             end
         end
         table_row_now_idx = table_row_now_idx+1;
@@ -142,7 +167,6 @@ for idx_img_set = 1:n_img_set
 end
 
 close(h);
-
 handles.Feature_table = Feature_table;
 handles.Feature_display_cell = Feature_display_cell;
 

@@ -107,6 +107,16 @@ if isfield(info, 'RadiopharmaceuticalInformationSequence')
     
     patient_weight_in_kg =  info.PatientWeight;
     
+    if isempty(patient_weight_in_kg)
+        
+        prompt = {'Enter Patient Weight (in kg):'};
+        dlg_title = 'Input for patient weight';
+        num_lines = 1;
+        def = {'70'};
+        answer = inputdlg(prompt,dlg_title,num_lines,def);
+        patient_weight_in_kg = str2num(answer{1}) ; % convert to Bq
+        
+    end
     if ~isfield(info.RadiopharmaceuticalInformationSequence.Item_1, 'RadionuclideTotalDose')
         prompt = {'Enter RadionuclideTotalDose (in mCi):'};
         dlg_title = 'Input for dose info';

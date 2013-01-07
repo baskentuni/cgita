@@ -1,4 +1,4 @@
-function feature_output = coocurrance_Contrast(varargin)
+function feature_output = cooccurrence_Contrast(varargin)
 global glcm_global
 
 if exist('glcm_global')==1

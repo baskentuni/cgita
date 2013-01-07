@@ -1,4 +1,4 @@
-function feature_output = coocurrance_Correlation(varargin)
+function feature_output = cooccurrence_Correlation(varargin)
 global glcm_global
 
 if glcm_global == 1

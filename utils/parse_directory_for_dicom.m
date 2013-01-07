@@ -39,7 +39,11 @@ for i = 1:dirlen
         waitbar(i / steps);
     end
     if exist('dcmreadfile','file')
-        info = dcmreadfile(all_files_list{i});
+        try
+            info = dcmreadfile(all_files_list{i});
+        catch 
+            info = [];
+        end
     else
         info = dicominfo_Dean_rev(all_files_list{i}, do_fields_table);
     end
@@ -106,6 +110,12 @@ if size(datatable,1) == 1
     % simple case. Return the list.
     filelist = study_description{1}.description{1}.filename;
 else
+    if (exist('fileinfo')~=1)
+        warndlg('No DICOM files within the selected folder');
+        varargout{1} = [];
+        varargout{2} = [];
+        return;
+    end
     [filelist fusion_filelist] = DICOM_selection_GUI(datatable, table_content, fileinfo, study_ID, study_description);
 end
 

@@ -18,7 +18,11 @@ if exist('image_property') == 1
     clear image_property;
 end
 global image_property;
-image_property.pixel_spacing = img_obj.pixel_spacing;
+if ~isempty(img_obj)
+    image_property.pixel_spacing = img_obj.pixel_spacing;
+else
+    image_property.pixel_spacing = 0;
+end
 
 
 return;

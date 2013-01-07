@@ -2,6 +2,8 @@ function ROI_struct = PMOD_VOI_reader_match_image(filename, handles);%, zV, x1, 
 % only support PMOD VOI on static images
 % only support ROI drawn on axial slices
 % does support multiple contours on the same slice
+h = msgbox('Reading the PMOD VOI file. Please wait...');
+
 zV = -fliplr(handles.zV_original)*10;
 
 fid = fopen(filename);
@@ -68,8 +70,10 @@ for idx_list = 1:n_list
         text_list = text1(list_des_begin_pos(idx_list):list_des_begin_pos(idx_list+1)-1);
     end
     
-    ROI_struct(idx_list).structureName = get_value_from_text(text_list, '# voi_name', '%s# voi_name');
+    temp_str = get_value_from_text(text_list, '# voi_name', '%c');
+    temp_pos_str = strfind(temp_str, '# voi_name');
     
+    ROI_struct(idx_list).structureName = temp_str(1:temp_pos_str-1);
     n_voi = get_value_from_text(text_list, '# number_of_vois', '%d ');
     
     if round(n_voi)~=n_voi
@@ -79,9 +83,15 @@ for idx_list = 1:n_list
         error('This function does not support multiple VOIs within a VOI');
     end
     voi_des_begin_pos = strfind(text_list, '#TIME VOI NUMBER');
+    if isempty(voi_des_begin_pos)
+        voi_des_begin_pos = strfind(text_list, '#VOI TIME LIST NUMBER');
+    end
     text_voi = text_list(voi_des_begin_pos:end);
     % determine number of slices within the VOI
     n_roi = get_value_from_text(text_voi, '# number_of_rois', '%d ');
+    if isempty(n_roi)
+        n_roi = 0;
+    end
     if n_roi > 0
         contour_name = {};
         roi_des_begin_pos = strfind(text_voi, '#ROI ON SLICE');
@@ -116,11 +126,15 @@ for idx_list = 1:n_list
                         pos_vertices(idx_vertices, :) = sscanf(InputText{1}{idx_temp + idx_vertices}, '%f %f %f');
                     end
                     if numel(pos_vertices) > 1
-                        [dummy slice_now] = min(abs(zV-pos_vertices(1,3)));
-                        %slice_now
-                        corrected_vertices = process_pmod_vertices_new(pos_vertices, handles, header);
-                        
-                        ROI_struct(idx_list).contour(slice_now).segments(contour_index).points = corrected_vertices/10;
+                        if (min(zV)<=pos_vertices(1,3))&&(max(zV)>=pos_vertices(1,3))                            
+                            [dummy slice_now] = min(abs(zV-pos_vertices(1,3)));
+                            %slice_now
+                            corrected_vertices = process_pmod_vertice(pos_vertices, handles);
+                            
+                            ROI_struct(idx_list).contour(slice_now).segments(contour_index).points = corrected_vertices/10;
+                        else
+                            %stop;
+                        end
                     end
                     idx_temp = idx_temp + idx_vertices;
                     
@@ -163,11 +177,13 @@ end
 %     end
 % end
 %
+close(h);
+
 return;
 
 function outvar = get_value_from_text(str1, str2, str3)
 InputText=textscan(str1, '%s', 10, 'delimiter', '\n');
-
+outvar = [];
 for idx = 1:numel(InputText{1})
     if ~isempty(strfind(InputText{1}{idx}, str2))
         outvar = sscanf(InputText{1}{idx}, str3);

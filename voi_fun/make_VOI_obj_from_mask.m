@@ -14,15 +14,20 @@ ROI_struct(idx_list).contour = empty_struct.contour;
 
 ROI_struct(idx_list).structureName = voi_name;
 
+xV2 = (handles.xV);
+yV2 = (handles.yV);
 
 for slice_now = 1:n_slices
     if sum(sum(mask_vol(:,:,slice_now))) >1  
         if max(max(bwlabel(mask_vol(:,:,slice_now)))) == 1
             contour_index = 1;
+            %[r c] = mask2poly(mask_vol(:,:,slice_now));
             [r c] = mask2poly(mask_vol(:,:,slice_now));
             pos_vertices = zeros(length(r), 3);
             for idx = 1:length(r)
-                pos_vertices(idx, :) = [handles.xV(c(idx))  handles.yV(r(idx)) handles.zV(slice_now)];
+                %pos_vertices(idx, :) = [handles.xV(c(idx))  handles.yV(r(idx)) handles.zV(slice_now)];
+                %pos_vertices(idx, :) = [handles.xV(r(idx))  handles.yV(c(idx)) handles.zV(slice_now)];
+                pos_vertices(idx, :) = [xV2(r(idx)) yV2(c(idx))        handles.zV(slice_now)];
             end
             ROI_struct(idx_list).contour(slice_now).segments(contour_index).points = pos_vertices;
         else
@@ -31,7 +36,9 @@ for slice_now = 1:n_slices
                 [r c] = mask2poly(label_img == contour_index);
                 pos_vertices = zeros(length(r), 3);
                 for idx = 1:length(r)
-                    pos_vertices(idx, :) = [handles.xV(c(idx))  handles.yV(r(idx)) handles.zV(slice_now)];
+                    %pos_vertices(idx, :) = [handles.xV(c(idx))  handles.yV(r(idx)) handles.zV(slice_now)];
+                    %pos_vertices(idx, :) = [handles.xV(r(idx))  handles.yV(c(idx)) handles.zV(slice_now)];
+                    pos_vertices(idx, :) = [xV2(r(idx)) yV2(c(idx))          handles.zV(slice_now)];
                 end
                 ROI_struct(idx_list).contour(slice_now).segments(contour_index).points = pos_vertices;
             end

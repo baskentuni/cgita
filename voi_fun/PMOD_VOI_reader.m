@@ -42,7 +42,7 @@ for idx_list = 1:n_list
         text_list = text1(list_des_begin_pos(idx_list):list_des_begin_pos(idx_list+1)-1);
     end
     
-    ROI_struct(idx_list).structureName = get_value_from_text(text_list, '# voi_name', '%s# voi_name');
+    ROI_struct(idx_list).structureName = get_value_from_text(text_list, '# voi_name', '%c# voi_name');
     
     n_voi = get_value_from_text(text_list, '# number_of_vois', '%d ');
     

@@ -28,13 +28,27 @@ if handles.Let_VOI_decide_slice ==1 % Determine the slice location
     list_idx = get(handles.listbox1, 'Value');
     %if case_tag > 1 && handles.VOI_loaded
         [handles.contour_volume handles.mask_volume first_slice last_slice] = return_volume_contour_mask(handles.VOI_obj(list_idx).contour, handles);
+        if round((first_slice+last_slice)/2) == Inf
+            warndlg('Empty VOI');
+        else
         handles.current_k = round((first_slice+last_slice)/2);
+        
+        while(1)
+            temp_img = handles.contour_volume(:,:,handles.current_k);
+            if isempty(find(abs(diff(sum(temp_img,1)>0))==1))
+                handles.current_k = handles.current_k-1;
+            else
+                break;
+            end
+            
+        end
         % handles.current_slice = round(mean(first_slice,last_slice));
         temp_img = handles.contour_volume(:,:,handles.current_k);
         temp_vec = find(abs(diff(sum(temp_img,1)>0))==1);
         handles.current_j = round(mean([temp_vec(1) temp_vec(end)]));
         temp_vec = find(abs(diff(sum(temp_img,2)>0))==1);
         handles.current_i = round(mean([temp_vec(1) temp_vec(end)]));
+        end
    % end
 end
 % Get the images displayed
@@ -50,10 +64,31 @@ axes_images = overlay_images(handles);
 % handles.sagittal_btndwn_fcn = get(handles.sagittal_axes,'ButtonDownFcn');
 % 
 %waitfor(handles.axial_axes, 'Children');
+pixel_spacing = handles.Primary_image_obj.pixel_spacing;
+volume_size = size(handles.Primary_image_obj.image_volume_data);
 axes(handles.axial_axes); temp1 = get(handles.axial_axes, 'ButtonDownFcn');
-handles.Img_axial = imagesc(axes_images{3}); axis off;  set(handles.Img_axial, 'ButtonDownFcn', handles.axial_btndwn_fcn );
+handles.Img_axial = imagesc(axes_images{3}); axis off;  
+% if get(handles.axes_aspect_ratio_checkbox, 'Value')
+%     pbaspect([1  pixel_spacing(2)*volume_size(2)/(volume_size(1)*pixel_spacing(1)) 1]); %/pixel_spacing(2)
+% else
+%     pbaspect([1  volume_size(2)/(volume_size(1)) 1]); %/pixel_spacing(2)
+% end
+set(handles.Img_axial, 'ButtonDownFcn', handles.axial_btndwn_fcn );
+
 axes(handles.coronal_axes); temp1 = get(handles.coronal_axes, 'ButtonDownFcn');
-handles.Img_coronal =imagesc(axes_images{1}); axis off; set(handles.Img_coronal, 'ButtonDownFcn', handles.coronal_btndwn_fcn);
+handles.Img_coronal =imagesc(axes_images{1}); axis off; 
+% if get(handles.axes_aspect_ratio_checkbox, 'Value')
+%     pbaspect([1 pixel_spacing(3)*volume_size(3)/(volume_size(1)*pixel_spacing(1)) 1]); %*
+% else
+%     pbaspect([1  volume_size(3)/(volume_size(1)) 1]); %/pixel_spacing(2)
+% end
+set(handles.Img_coronal, 'ButtonDownFcn', handles.coronal_btndwn_fcn);
 axes(handles.sagittal_axes); temp1 = get(handles.sagittal_axes, 'ButtonDownFcn');
-handles.Img_sagittal =imagesc(axes_images{2}); axis off; set(handles.Img_sagittal, 'ButtonDownFcn', handles.sagittal_btndwn_fcn);
+handles.Img_sagittal =imagesc(axes_images{2}); axis off; 
+% if get(handles.axes_aspect_ratio_checkbox, 'Value')
+%     pbaspect([1  pixel_spacing(3)*volume_size(3)/(volume_size(2)*pixel_spacing(2)) 1]);
+% else
+%     pbaspect([1  volume_size(3)/(volume_size(2)) 1]); %/pixel_spacing(2)
+% end
+set(handles.Img_sagittal, 'ButtonDownFcn', handles.sagittal_btndwn_fcn);
 return;
