@@ -22,7 +22,7 @@ function varargout = CGITA_GUI(varargin)
 
 % Edit the above text to modify the response to help CGITA_GUI
 
-% Last Modified by GUIDE v2.5 18-Jul-2012 08:33:57
+% Last Modified by GUIDE v2.5 07-Jan-2013 13:59:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -122,7 +122,7 @@ handles.current_j = [];
 handles.current_k = [];
 handles.Let_VOI_decide_slice = 0;
 handles.direction_text = [handles.text13 handles.text14 handles.text15 handles.text16];
-handles.pmod_voi_flag = 1; % temporary flag. 
+handles.pmod_voi_flag = 1; % temporary flag.
 
 %handles.resample_n_values = handles.digitization_bins;
 
@@ -146,7 +146,13 @@ handles.Img_sagittal = image([0 0;0 0]); colormap gray; axis off;
 set(handles.Img_sagittal,'ButtonDownFcn',temp1);
 
 set(handles.fusion_factor_slider, 'SliderStep', [0.01 0.01]);
-% Update handles structure
+
+if exist('parityscan')==0
+    [pathname filename] = fileparts(which('CGITA_GUI'));
+    [pathname_ipt filename] = fileparts(which('imresize'));
+    copyfile([pathname_ipt filesep 'private' filesep 'parityscan.*'], [pathname filesep 'utils']);
+end
+
 guidata(hObject, handles);
 
 % UIWAIT makes CGITA_GUI wait for user response (see UIRESUME)
@@ -162,7 +168,21 @@ function varargout = CGITA_GUI_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
+% Make the GUI maximized
+%set(handles.figure1, 'Units', 'normalized');
+%set(handles.figure1, 'OuterPosition', [0 0 1 1]);
+% fh = get(handles.figure1,'JavaFrame'); % Get Java Frame
+% fh.setMaximized(true);
 
+% Make all buttons with the same font size
+% set(handles.load_Primary_btn, 'FontUnits', 'points');
+% font_size = get(handles.load_Primary_btn, 'FontSize');
+% all_btns = findobj('Style', 'pushbutton');
+% set(all_btns, 'FontUnits', 'points');
+% set(all_btns, 'FontSize', font_size);
+%set(all_btns, 'FontUnits', 'normalized');
+
+return;
 
 % % --- Executes on button press in pushbutton1.
 % function pushbutton1_Callback(hObject, eventdata, handles)
@@ -170,56 +190,56 @@ varargout{1} = handles.output;
 % % eventdata  reserved - to be defined in a future version of MATLAB
 % % handles    structure with handles and user data (see GUIDATA)
 % in_file = uigetfile( '*.mat', 'Select the .mat file saved by CERR');
-% 
+%
 % if in_file == 0
 %     return;
 % else
 %     temp1 = load(in_file, 'planC');
 %     handles.planC = temp1.planC;
 % end
-% 
+%
 % field_length = length(handles.planC);
-% 
+%
 % handles.CT_img = handles.planC{handles.planC{field_length}.scan}.scanArray;
 % handles.ROI_structure = handles.planC{handles.planC{field_length}.structures};
-% 
+%
 % [handles.xV, handles.yV, handles.zV] = getScanXYZVals(handles.planC{handles.planC{field_length}.scan}(1));
-% 
+%
 % structure_length= length(handles.ROI_structure);
-% 
+%
 % for idx = 1:structure_length
 %     list{idx} =  handles.ROI_structure(idx).structureName;
 % end
-% 
+%
 % set(handles.listbox1, 'String', list);
-% 
+%
 % pix_Z = handles.planC{handles.planC{field_length}.scan}.scanInfo(1).voxelThickness;
 % pix_X  = handles.planC{handles.planC{field_length}.scan}.scanInfo(1).grid1Units;
 % loc1 = get(handles.coronal_axes, 'Position');
 % temp1 = pix_X * size(handles.CT_img,1)/pix_Z;
 % loc1 = [loc1(1:3) temp1];
 % set(handles.coronal_axes, 'Position', loc1);
-% 
+%
 % loc1 = get(handles.sagittal_axes, 'Position');
 % loc1 = [loc1(1:3) temp1];
 % set(handles.sagittal_axes, 'Position', loc1);
-% 
+%
 % %handles  = display_img_ROI(hObject, eventdata, handles);
 % listbox1_Callback(hObject, eventdata, handles)
-% 
+%
 % guidata(hObject, handles);
 % return;
-% 
+%
 % function handles = display_img_ROI(hObject, eventdata, handles)
 % list_idx = get(handles.listbox1, 'Value');
 % [handles.contour_volume handles.mask_volume first_slice last_slice] = return_volume_contour_mask(handles.ROI_structure(list_idx).contour, handles);
-% 
+%
 % handles.current_slice = round(mean(first_slice,last_slice));
-% 
+%
 % handles = refresh_img(handles);
 % guidata(hObject, handles);
 % return;
-% 
+%
 % function handles =refresh_img(handles)
 % img_color = overlay_img_with_contour(handles.CT_img(:,:,handles.current_slice), handles.contour_volume(:,:,handles.current_slice));
 % axes(handles.axial_axes);
@@ -227,11 +247,11 @@ varargout{1} = handles.output;
 % img_color = overlay_img_with_contour(squeeze(handles.CT_img(:,handles.current_x,:)), squeeze(handles.contour_volume(:,handles.current_x, :)));
 % axes(handles.coronal_axes);
 % imagesc(imrotate(img_color, -90)); axis off;
-% 
+%
 % img_color = overlay_img_with_contour(squeeze(handles.CT_img(handles.current_y,:,:)), squeeze(handles.contour_volume(handles.current_y,:, :)));
 % axes(handles.sagittal_axes);
 % imagesc(imrotate(img_color, -90)); axis off;
-% 
+%
 % return;
 
 function img_color = overlay_img_with_contour(CT_slice, contour_slice)
@@ -474,7 +494,7 @@ function load_Primary_btn_Callback(hObject, eventdata, handles, varargin)
 % hObject    handle to load_Primary_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+dirflag = 0; % To determine whether to parst dir
 if nargin == 3
     % Get the directory to load primary images from
     if exist('prev_dir.mat')
@@ -489,7 +509,8 @@ if nargin == 3
     if ~isdir(default_dir)
         default_dir = '';
     end
-    Primary_dir = uigetdir(default_dir);
+    %Primary_dir = uigetdir(default_dir);
+    Primary_dir = uigetdir;
     
     if Primary_dir == 0
         return;
@@ -503,12 +524,20 @@ if nargin == 3
         end
     end
 else
-    Primary_dir = varargin{1};
+    if ischar(varargin{1})
+        Primary_dir = varargin{1};
+    else
+        dirflag = 1;
+        filelist = varargin{1};
+        fusion_filelist = {};
+    end
 end
 % Parse directory and determine how many studies/series are within this
 % folder and the subfolders
-[filelist fusion_filelist] = parse_directory_for_dicom(Primary_dir);
-drawnow;
+if dirflag == 0
+    [filelist fusion_filelist] = parse_directory_for_dicom(Primary_dir);
+    drawnow;
+end
 
 if isempty(filelist)
     return;
@@ -549,17 +578,17 @@ if ~isempty(fusion_filelist)
     
     %handles.Fusion_image_obj.range = [min(min(min(handles.Primary_image_obj.image_volume_data))) max(max(max(handles.Primary_image_obj.image_volume_data)))];
     handles.Fusion_image_obj.range = [str2num(get(handles.Fusion_min, 'String')) str2num(get(handles.Fusion_max, 'String'))];
-%     set(handles.Fusion_min, 'String', num2str(handles.Fusion_image_obj.range(1)));
-%     set(handles.Fusion_max, 'String', num2str(handles.Fusion_image_obj.range(2)));
+    %     set(handles.Fusion_min, 'String', num2str(handles.Fusion_image_obj.range(1)));
+    %     set(handles.Fusion_max, 'String', num2str(handles.Fusion_image_obj.range(2)));
     
     %handles.Fusion_image_obj.color_map = bone(65536);
     handles.Fusion_image_obj.color_map = handles.fusion_colormap;
-
-    handles.Fusion_image_for_display = handles.Fusion_image_obj;    
+    
+    handles.Fusion_image_for_display = handles.Fusion_image_obj;
     handles.Fusion_image_for_display.image_volume_data = interp_img; % The display image volume is for the fusion display
     handles.Fusion_image_for_display.pixel_spacing = handles.Fusion_image_obj.pixel_spacing;
     
-
+    
 end
 
 handles = refresh_display(handles);
@@ -598,8 +627,8 @@ if nargin == 3
     end
     [filename, pathname] = uigetfile('*.voi', 'Select VOI file', default_dir);
     voi_file = fullfile(pathname, filename);
-
-    if isdir(pathname)        
+    
+    if isdir(pathname)
         prev_voi_dirname = pathname;
         if exist('prev_dir.mat')
             save(which('prev_dir.mat'), 'prev_voi_dirname', '-append');
@@ -610,7 +639,7 @@ else
     voi_file = varargin{1};
 end
 
- % voi_file = 'D:\Data\Textural analysis\Pre_data_PET\A0001\test_roi_0322_11630340.voi';
+% voi_file = 'D:\Data\Textural analysis\Pre_data_PET\A0001\test_roi_0322_11630340.voi';
 % voi_file = 'D:\Data\Dean_temp1\PAINTING\1515604_2.0_1ST.voi';
 if filename == 0
     return;
@@ -642,19 +671,19 @@ return;
 %     errordlg('More than one RS structure. Cannot continue');
 %     return;
 % end
-% 
+%
 % handles.ROI_structure = DICOM_contour_reader(series_filenames{1}.description{rs_series}.filename{1}, out1.z_location, ...
 %     out1.original_x_location, out1.original_y_location, fliplr(out1.original_z_location), ...
 %     out1.x_location, out1.y_location, out1.z_location);
-% 
+%
 % structure_length= length(handles.ROI_structure);
-% 
+%
 % for idx = 1:structure_length
 %     list{idx} =  handles.ROI_structure(idx).structureName;
 % end
-% 
+%
 % set(handles.listbox1, 'String', list);
-% 
+%
 % %handles  = display_img_ROI(hObject, eventdata, handles);
 % set(handles.listbox1, 'Value', 1);
 % listbox1_Callback(hObject, eventdata, handles)
@@ -763,155 +792,64 @@ if nargout > 0
 else
     [handles] = TA_Callback(handles, 'Single', gui_flag);
 end
-% 
+%
 % [feature_stats stats_vec stat_name_val] = compute_features_stats(segmented_image_small, handles.Primary_image_obj.pixel_spacing);
-% 
+%
 % texture_stat_table_GUI(stat_name_val);
 %feature_table(idx_subject+1,1:8) = num2cell(stats_vec);
 
 % Fourth, make a table for the TA results
-% Fifth, show the GUI of the final results and allow users to save it. 
+% Fifth, show the GUI of the final results and allow users to save it.
 guidata(hObject, handles);
 return;
 
 function varargout = TA_Callback(handles, analysis_type, gui_flag)
+
 if strcmp(analysis_type, 'Single')
     list_idx = get(handles.listbox1, 'Value');
 else
     list_idx = 1:length(handles.VOI_obj);
 end
 
+h = msgbox('Preparing for the texture analysis. Please wait...');
+
+if isfield(handles,'image_vol_for_TA')
+    handles = rmfield(handles, 'image_vol_for_TA');
+end
+if isfield(handles,'mask_vol_for_TA')
+    handles = rmfield(handles, 'mask_vol_for_TA');
+end
+if isfield(handles,'mask_vol_for_TA_extended')
+    handles = rmfield(handles, 'mask_vol_for_TA_extended');
+end
 for voi_idx = 1:length(list_idx)
     [handles.contour_volume handles.mask_volume first_slice last_slice] = return_volume_contour_mask(handles.VOI_obj(list_idx(voi_idx)).contour, handles);
     mask = handles.mask_volume;
-    [range extended_range] = determine_mask_range(mask);
-    handles.range{1} = range;
-    handles.image_vol_for_TA{1}{voi_idx} = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
-    
-    handles.mask_vol_for_TA{1}{voi_idx} = mask(range{3}, range{2}, range{1});
-    handles.mask_vol_for_TA_extended{1}{voi_idx} = mask(extended_range{3}, extended_range{2}, extended_range{1});
-    
-    % Perform the digitization
-    % First, determine the digitization parameters
-    switch handles.digitization_flag
-        case 0 % 0 - use the min and max within the masked volume for digitization (default)
-            tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
-            digitization_min = min(tempimg(find(mask(range{3}, range{2}, range{1}))));
-            digitization_max = max(tempimg(find(mask(range{3}, range{2}, range{1}))));            
-        case 1 % 1 - use the min and max within the rectangular cylinder volume 
-            tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1});
-            digitization_min = min(tempimg(:));
-            digitization_max = max(tempimg(:));            
-        case 2 % 2 - use 0 and max within the masked volume for digitization
-            tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
-            digitization_min = 0;
-            digitization_max = max(tempimg(find(mask(range{3}, range{2}, range{1}))));        
-        case 3 % 3 - use 0 and max within the rectangular cylinder volume 
-            tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1});
-            digitization_min = 0;
-            digitization_max = max(tempimg(:));            
-        case 4 % 4 - use preset min and max values (needs to assign both values)
-            digitization_min = handles.default_digitization_min;
-            digitization_max = handles.default_digitization_max;                
-    end
-    
-    tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
-    tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
-    handles.resampled_image_vol_for_TA{1}{voi_idx} = tempimg;
-    
-    tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1});
-    tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
-    handles.resampled_image_vol_for_TA_unmasked{1}{voi_idx} = tempimg;
-    
-    switch handles.digitization_flag
-        case 0 % 0 - use the min and max within the masked volume for digitization (default)
-            tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1})  .* mask(extended_range{3}, extended_range{2}, extended_range{1});
-            digitization_min = min(tempimg(find(mask(extended_range{3}, extended_range{2}, extended_range{1}))));
-            digitization_max = max(tempimg(find(mask(extended_range{3}, extended_range{2}, extended_range{1}))));            
-        case 1 % 1 - use the min and max within the rectangular cylinder volume 
-            tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1});
-            digitization_min = min(tempimg(:));
-            digitization_max = max(tempimg(:));            
-        case 2 % 2 - use 0 and max within the masked volume for digitization
-            tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1})  .* mask(extended_range{3}, extended_range{2}, extended_range{1});
-            digitization_min = 0;
-            digitization_max = max(tempimg(find(mask(extended_range{3}, extended_range{2}, extended_range{1}))));        
-        case 3 % 3 - use 0 and max within the rectangular cylinder volume 
-            tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1});
-            digitization_min = 0;
-            digitization_max = max(tempimg(:));            
-        case 4 % 4 - use preset min and max values (needs to assign both values)
-            digitization_min = handles.default_digitization_min;
-            digitization_max = handles.default_digitization_max;                
-    end
-    
-    tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1})  .* mask(extended_range{3}, extended_range{2}, extended_range{1});
-    tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
-    handles.resampled_image_vol_for_TA_extended{1}{voi_idx} = tempimg;
-    
-    tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1});
-    tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
-    handles.resampled_image_vol_for_TA_unmasked_extended{1}{voi_idx} = tempimg;
-    
-    if handles.Fusion_images_loaded
-        [handles.fusion_contour_volume handles.fusion_mask_volume] = return_volume_contour_mask_Fusion_image(handles.VOI_obj(list_idx(voi_idx)).contour, handles);
-        % Second, get the masked voxels
-        fusion_mask = handles.fusion_mask_volume;
-        % Third, send the masked voxels for texturare analysis
-        [fusion_range fusion_extended_range] = determine_mask_range(fusion_mask);
-        handles.range{2} = fusion_range;
+    if sum(mask(:)) > 1
+        [range extended_range] = determine_mask_range(mask);
+        handles.range{1} = range;
+        handles.image_vol_for_TA{1}{voi_idx} = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
+                        
+        handles.mask_vol_for_TA{1}{voi_idx} = mask(range{3}, range{2}, range{1});
+        handles.mask_vol_for_TA_extended{1}{voi_idx} = mask(extended_range{3}, extended_range{2}, extended_range{1});
         
-        handles.image_vol_for_TA{2}{voi_idx} = handles.Fusion_image_obj.image_volume_data(fusion_range{3}, fusion_range{2},fusion_range{1}) .* ...
-            fusion_mask(fusion_range{3}, fusion_range{2}, fusion_range{1});
-        
-        handles.mask_vol_for_TA{2}{voi_idx} = fusion_mask(fusion_range{3}, fusion_range{2}, fusion_range{1});
-        handles.mask_vol_for_TA_extended{2}{voi_idx} = mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
-        
+        % Perform the digitization
+        % First, determine the digitization parameters
         switch handles.digitization_flag
             case 0 % 0 - use the min and max within the masked volume for digitization (default)
-                tempimg = handles.Fusion_image_obj.image_volume_data(fusion_range{3}, fusion_range{2}, fusion_range{1}) .* fusion_mask(fusion_range{3}, fusion_range{2}, fusion_range{1});
-                digitization_min = min(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
-                digitization_max = max(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
+                tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
+                digitization_min = min(tempimg(find(mask(range{3}, range{2}, range{1}))));
+                digitization_max = max(tempimg(find(mask(range{3}, range{2}, range{1}))));
             case 1 % 1 - use the min and max within the rectangular cylinder volume
-                tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1});
                 digitization_min = min(tempimg(:));
                 digitization_max = max(tempimg(:));
             case 2 % 2 - use 0 and max within the masked volume for digitization
-                tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
                 digitization_min = 0;
-                digitization_max = max(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
+                digitization_max = max(tempimg(find(mask(range{3}, range{2}, range{1}))));
             case 3 % 3 - use 0 and max within the rectangular cylinder volume
-                tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
-                digitization_min = 0;
-                digitization_max = max(tempimg(:));
-            case 4 % 4 - use preset min and max values (needs to assign both values)
-                digitization_min = handles.default_digitization_min;
-                digitization_max = handles.default_digitization_max;
-        end
-    
-        tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
-        tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
-        handles.resampled_image_vol_for_TA{2}{voi_idx} = tempimg;
-        
-        tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
-        tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
-        handles.resampled_image_vol_for_TA_unmasked{2}{voi_idx} = tempimg;
-        
-        switch handles.digitization_flag
-            case 0 % 0 - use the min and max within the masked volume for digitization (default)
-                tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
-                digitization_min = min(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
-                digitization_max = max(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
-            case 1 % 1 - use the min and max within the rectangular cylinder volume
-                tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
-                digitization_min = min(tempimg(:));
-                digitization_max = max(tempimg(:));
-            case 2 % 2 - use 0 and max within the masked volume for digitization
-                tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
-                digitization_min = 0;
-                digitization_max = max(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
-            case 3 % 3 - use 0 and max within the rectangular cylinder volume
-                tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1});
                 digitization_min = 0;
                 digitization_max = max(tempimg(:));
             case 4 % 4 - use preset min and max values (needs to assign both values)
@@ -919,18 +857,126 @@ for voi_idx = 1:length(list_idx)
                 digitization_max = handles.default_digitization_max;
         end
         
-        tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) ...
-            .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+        tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
         tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
-        handles.resampled_image_vol_for_TA_extended{2}{voi_idx} = tempimg;
+        handles.resampled_image_vol_for_TA{1}{voi_idx} = tempimg;
         
-        tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+        tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1});
         tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
-        handles.resampled_image_vol_for_TA_unmasked_extended{2 }{voi_idx} = tempimg;
+        handles.resampled_image_vol_for_TA_unmasked{1}{voi_idx} = tempimg;
+        
+        switch handles.digitization_flag
+            case 0 % 0 - use the min and max within the masked volume for digitization (default)
+                tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1})  .* mask(extended_range{3}, extended_range{2}, extended_range{1});
+                digitization_min = min(tempimg(find(mask(extended_range{3}, extended_range{2}, extended_range{1}))));
+                digitization_max = max(tempimg(find(mask(extended_range{3}, extended_range{2}, extended_range{1}))));
+            case 1 % 1 - use the min and max within the rectangular cylinder volume
+                tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1});
+                digitization_min = min(tempimg(:));
+                digitization_max = max(tempimg(:));
+            case 2 % 2 - use 0 and max within the masked volume for digitization
+                tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1})  .* mask(extended_range{3}, extended_range{2}, extended_range{1});
+                digitization_min = 0;
+                digitization_max = max(tempimg(find(mask(extended_range{3}, extended_range{2}, extended_range{1}))));
+            case 3 % 3 - use 0 and max within the rectangular cylinder volume
+                tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1});
+                digitization_min = 0;
+                digitization_max = max(tempimg(:));
+            case 4 % 4 - use preset min and max values (needs to assign both values)
+                digitization_min = handles.default_digitization_min;
+                digitization_max = handles.default_digitization_max;
+        end
+        
+        tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1})  .* mask(extended_range{3}, extended_range{2}, extended_range{1});
+        tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
+        handles.resampled_image_vol_for_TA_extended{1}{voi_idx} = tempimg;
+        
+        tempimg = handles.Primary_image_obj.image_volume_data(extended_range{3}, extended_range{2}, extended_range{1});
+        tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
+        handles.resampled_image_vol_for_TA_unmasked_extended{1}{voi_idx} = tempimg;
+        
+        if handles.Fusion_images_loaded
+            [handles.fusion_contour_volume handles.fusion_mask_volume] = return_volume_contour_mask_Fusion_image(handles.VOI_obj(list_idx(voi_idx)).contour, handles);
+            % Second, get the masked voxels
+            fusion_mask = handles.fusion_mask_volume;
+            % Third, send the masked voxels for texturare analysis
+            [fusion_range fusion_extended_range] = determine_mask_range(fusion_mask);
+            handles.range{2} = fusion_range;
+            
+            handles.image_vol_for_TA{2}{voi_idx} = handles.Fusion_image_obj.image_volume_data(fusion_range{3}, fusion_range{2},fusion_range{1}) .* ...
+                fusion_mask(fusion_range{3}, fusion_range{2}, fusion_range{1});
+            
+            handles.mask_vol_for_TA{2}{voi_idx} = fusion_mask(fusion_range{3}, fusion_range{2}, fusion_range{1});
+            handles.mask_vol_for_TA_extended{2}{voi_idx} = mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+            
+            switch handles.digitization_flag
+                case 0 % 0 - use the min and max within the masked volume for digitization (default)
+                    tempimg = handles.Fusion_image_obj.image_volume_data(fusion_range{3}, fusion_range{2}, fusion_range{1}) .* fusion_mask(fusion_range{3}, fusion_range{2}, fusion_range{1});
+                    digitization_min = min(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
+                    digitization_max = max(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
+                case 1 % 1 - use the min and max within the rectangular cylinder volume
+                    tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                    digitization_min = min(tempimg(:));
+                    digitization_max = max(tempimg(:));
+                case 2 % 2 - use 0 and max within the masked volume for digitization
+                    tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                    digitization_min = 0;
+                    digitization_max = max(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
+                case 3 % 3 - use 0 and max within the rectangular cylinder volume
+                    tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                    digitization_min = 0;
+                    digitization_max = max(tempimg(:));
+                case 4 % 4 - use preset min and max values (needs to assign both values)
+                    digitization_min = handles.default_digitization_min;
+                    digitization_max = handles.default_digitization_max;
+            end
+            
+            tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+            tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
+            handles.resampled_image_vol_for_TA{2}{voi_idx} = tempimg;
+            
+            tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+            tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
+            handles.resampled_image_vol_for_TA_unmasked{2}{voi_idx} = tempimg;
+            
+            switch handles.digitization_flag
+                case 0 % 0 - use the min and max within the masked volume for digitization (default)
+                    tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                    digitization_min = min(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
+                    digitization_max = max(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
+                case 1 % 1 - use the min and max within the rectangular cylinder volume
+                    tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                    digitization_min = min(tempimg(:));
+                    digitization_max = max(tempimg(:));
+                case 2 % 2 - use 0 and max within the masked volume for digitization
+                    tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                    digitization_min = 0;
+                    digitization_max = max(tempimg(find(fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}))));
+                case 3 % 3 - use 0 and max within the rectangular cylinder volume
+                    tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+                    digitization_min = 0;
+                    digitization_max = max(tempimg(:));
+                case 4 % 4 - use preset min and max values (needs to assign both values)
+                    digitization_min = handles.default_digitization_min;
+                    digitization_max = handles.default_digitization_max;
+            end
+            
+            tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1}) ...
+                .* fusion_mask(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+            tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
+            handles.resampled_image_vol_for_TA_extended{2}{voi_idx} = tempimg;
+            
+            tempimg = handles.Fusion_image_obj.image_volume_data(fusion_extended_range{3}, fusion_extended_range{2}, fusion_extended_range{1});
+            tempimg = digitize_img(tempimg, handles.digitization_type, 1, handles.digitization_bins, digitization_min, digitization_max);
+            handles.resampled_image_vol_for_TA_unmasked_extended{2 }{voi_idx} = tempimg;
+            
+        end
     end
 end
+close(h);
 
 handles = Perform_TA_in_GUI(handles);
+
 
 varargout{1} = handles;
 
@@ -958,7 +1004,7 @@ function apply_TA_all_VOI_Callback(hObject, eventdata, handles)
 % if ~handles.Primary_images_loaded
 %     return;
 % end
-% 
+%
 % handles = TA_Callback(handles, 'All');
 
 gui_flag = 1;
@@ -1045,15 +1091,15 @@ if ~isempty(fusion_filelist)
     
     %handles.Fusion_image_obj.range = [min(min(min(handles.Primary_image_obj.image_volume_data))) max(max(max(handles.Primary_image_obj.image_volume_data)))];
     handles.Fusion_image_obj.range = [str2num(get(handles.Fusion_min, 'String')) str2num(get(handles.Fusion_max, 'String'))];
-%     set(handles.Fusion_min, 'String', num2str(handles.Fusion_image_obj.range(1)));
-%     set(handles.Fusion_max, 'String', num2str(handles.Fusion_image_obj.range(2)));
+    %     set(handles.Fusion_min, 'String', num2str(handles.Fusion_image_obj.range(1)));
+    %     set(handles.Fusion_max, 'String', num2str(handles.Fusion_image_obj.range(2)));
     
     handles.Fusion_image_obj.color_map = bone(65536);
     
-    handles.Fusion_image_for_display = handles.Fusion_image_obj;    
+    handles.Fusion_image_for_display = handles.Fusion_image_obj;
     handles.Fusion_image_for_display.image_volume_data = interp_img; % The display image volume is for the fusion display
     handles.Fusion_image_for_display.pixel_spacing = handles.Fusion_image_obj.pixel_spacing;
-
+    
 end
 
 handles = refresh_display(handles);
@@ -1180,10 +1226,10 @@ function axial_axes_ButtonDownFcn(hObject, eventdata, handles)
 a = get(handles.axial_axes,'currentpoint');
 handles.current_j = round(a(1,1));
 handles.current_i = round(a(1,2));% / 248*89*4;
-guidata(hObject, handles); 
+guidata(hObject, handles);
 
 handles = refresh_display(handles);
-guidata(handles.axial_axes, handles); 
+guidata(handles.axial_axes, handles);
 
 
 % --- Executes on mouse press over axes background.
@@ -1194,10 +1240,10 @@ function coronal_axes_ButtonDownFcn(hObject, eventdata, handles)
 a = get(handles.coronal_axes,'currentpoint');
 handles.current_j = round(a(1,1));
 handles.current_k = round(a(1,2));% / 248*89*4;
-guidata(hObject, handles); 
+guidata(hObject, handles);
 
 handles = refresh_display(handles);
-guidata(handles.coronal_axes, handles); 
+guidata(handles.coronal_axes, handles);
 
 % --- Executes on mouse press over axes background.
 function sagittal_axes_ButtonDownFcn(hObject, eventdata, handles)
@@ -1209,10 +1255,10 @@ XData = get(hObject, 'XData');
 temp1 = XData(2):-1:XData(1);
 handles.current_i = temp1(round(a(1,1)));
 handles.current_k = round(a(1,2));% / 248*89*4;
-guidata(hObject, handles); 
+guidata(hObject, handles);
 
 handles = refresh_display(handles);
-guidata(handles.sagittal_axes, handles); 
+guidata(handles.sagittal_axes, handles);
 
 
 % --- Executes on button press in pushbutton15.
@@ -1241,7 +1287,7 @@ function figure1_WindowScrollWheelFcn(hObject, eventdata, handles)
 pointer_pos = get(hObject, 'currentpoint');
 pos_panel = get(handles.uipanel6, 'Position');
 
-axial_axes_pos = get(handles.axial_axes, 'Position');            pos1(1:2) =pos_panel(1:2) + axial_axes_pos(1:2).*pos_panel(3:4); pos1(3:4) = axial_axes_pos(3:4).*pos_panel(3:4); 
+axial_axes_pos = get(handles.axial_axes, 'Position');            pos1(1:2) =pos_panel(1:2) + axial_axes_pos(1:2).*pos_panel(3:4); pos1(3:4) = axial_axes_pos(3:4).*pos_panel(3:4);
 if sum(pointer_pos>pos1(1:2))==2 && sum(pointer_pos<(pos1(1:2)+pos1(3:4)))==2
     if handles.Primary_images_loaded || handles.Fusion_images_loaded
         handles.current_k = handles.current_k+eventdata.VerticalScrollCount;
@@ -1257,9 +1303,9 @@ if sum(pointer_pos>pos1(1:2))==2 && sum(pointer_pos<(pos1(1:2)+pos1(3:4)))==2
         end
     end
 end
-    %display('within axial');
+%display('within axial');
 
-coronal_axes_pos = get(handles.coronal_axes, 'Position');            pos1(1:2) =pos_panel(1:2) + coronal_axes_pos(1:2).*pos_panel(3:4); pos1(3:4) = coronal_axes_pos(3:4).*pos_panel(3:4); 
+coronal_axes_pos = get(handles.coronal_axes, 'Position');            pos1(1:2) =pos_panel(1:2) + coronal_axes_pos(1:2).*pos_panel(3:4); pos1(3:4) = coronal_axes_pos(3:4).*pos_panel(3:4);
 if sum(pointer_pos>pos1(1:2))==2 && sum(pointer_pos<(pos1(1:2)+pos1(3:4)))==2
     if handles.Primary_images_loaded || handles.Fusion_images_loaded
         handles.current_i = handles.current_i+eventdata.VerticalScrollCount;
@@ -1276,7 +1322,7 @@ if sum(pointer_pos>pos1(1:2))==2 && sum(pointer_pos<(pos1(1:2)+pos1(3:4)))==2
     end
 end
 
-sagittal_axes_pos = get(handles.sagittal_axes, 'Position');            pos1(1:2) =pos_panel(1:2) + sagittal_axes_pos(1:2).*pos_panel(3:4); pos1(3:4) = sagittal_axes_pos(3:4).*pos_panel(3:4); 
+sagittal_axes_pos = get(handles.sagittal_axes, 'Position');            pos1(1:2) =pos_panel(1:2) + sagittal_axes_pos(1:2).*pos_panel(3:4); pos1(3:4) = sagittal_axes_pos(3:4).*pos_panel(3:4);
 if sum(pointer_pos>pos1(1:2))==2 && sum(pointer_pos<(pos1(1:2)+pos1(3:4)))==2
     if handles.Primary_images_loaded || handles.Fusion_images_loaded
         handles.current_j = handles.current_j+eventdata.VerticalScrollCount;
@@ -1297,7 +1343,7 @@ end
 % set(handles.Img_coronal, 'ButtonDownFcn', handles.coronal_btndwn_fcn);
 % set(handles.Img_sagittal, 'ButtonDownFcn', handles.sagittal_btndwn_fcn);
 
-guidata(hObject, handles); 
+guidata(hObject, handles);
 
 return;
 
@@ -1479,7 +1525,7 @@ seed_I =round(y);
 seed_J = round(x);
 seed_K = handles.current_k;
 SUV_threshold = str2num(get(handles.suv_thresh, 'String'));
-if isempty(SUV_threshold) 
+if isempty(SUV_threshold)
     return;
 end
 L = bwlabeln(handles.Primary_image_obj.image_volume_data > SUV_threshold, 6);
@@ -1496,7 +1542,7 @@ for idx = 1:max(slice_now(:))
     end
 end
 
-if found_voxel == 0 
+if found_voxel == 0
     warndlg('The segmentation could not generate a mask with this SUV. No VOI generated.');
     return;
 end
@@ -1513,17 +1559,17 @@ end
 % if get(handles.strip_brain_checkbox, 'Value')
 %     voi_name = ['VOI_SUV_' get(handles.suv_thresh, 'String') '_brain_removed'];
 %     load spm_PET_template.mat;
-%     
+%
 %     ResliceVol = img_PET_template ;
 %     ResliceVol = flipdim(ResliceVol,3);
 %     slice_1 = str2num(get(handles.brain_slice_start, 'String'));
 %     slice_end = str2num(get(handles.brain_slice_end, 'String'));
-%     
+%
 %     StandardVol = handles.Primary_image_obj.image_volume_data(:,:,slice_1:slice_end);
 %     StandardVOX = handles.Primary_image_obj.pixel_spacing;
 %     ResliceVOX   =  [2 2 2];
 %     [Volume_out, warp_file] = SPM_Warp_3D_temp1( StandardVol, StandardVOX, ResliceVol, ResliceVOX );
-%     
+%
 %     mask_PET_template = img_PET_template>100;
 %     mask_PET_template = flipdim(mask_PET_template, 3);
 %     img1 = apply_warping(mask_PET_template, warp_file, ResliceVOX);
@@ -1535,11 +1581,11 @@ end
 %     img_labeled(find(img_labeled==0)) = NaN;
 %     max_label = mode(img_labeled(:));
 %     segmented_mask2 = img_labeled==max_label;
-% 
+%
 %     segmented_mask = segmented_mask2;
-%     
+%
 % else
-%     
+%
 % end
 voi_name = ['VOI_SUV_' get(handles.suv_thresh, 'String')];
 if length(handles.VOI_obj) < 1
@@ -1569,14 +1615,14 @@ return;
 % set(handles.text1, 'BackgroundColor', [1 0 0]);
 % drawnow;
 % handles.text1_color = color1;
-% 
+%
 % seg_ratio = str2num(get(handles.edit3, 'String'));
 % [P, J] = regionGrowing(handles.smoothed_pixel_data, [seed_K seed_I seed_J], handles.smoothed_pixel_data(seed_K, seed_I, seed_J)/seg_ratio);%, maxDist, tfMean, tfFillHoles, tfSimplify)
-% 
+%
 % handles.current_mask = J;
-% 
+%
 % handles = refresh_mask(handles.axes1, eventdata, handles);
-% 
+%
 % set(handles.text1,'String', 'Segmentation completed!');
 % set(handles.text1, 'BackgroundColor', color1);
 
@@ -1605,14 +1651,18 @@ end
 
 
 % --- Executes on button press in project_saver.
-function project_saver_Callback(hObject, eventdata, handles)
+function project_saver_Callback(hObject, eventdata, handles, varargin)
 % hObject    handle to project_saver (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
- [filename, pathname] = uiputfile('*.mat', 'Save current subject as a .mat file');
- save(fullfile(pathname, filename), 'handles');
- 
 
+if nargin == 3
+    [filename, pathname] = uiputfile('*.mat', 'Save current subject as a .mat file');
+    save(fullfile(pathname, filename), 'handles');
+else
+    filename = varargin{1};
+    save(filename, 'handles');
+end
 
 % --- Executes on button press in segment_fcm.
 function segment_fcm_Callback(hObject, eventdata, handles)
@@ -1626,7 +1676,7 @@ seed_I =round(y);
 seed_J = round(x);
 seed_K = handles.current_k;
 SUV_threshold = str2num(get(handles.suv_thresh, 'String'));
-if isempty(SUV_threshold) 
+if isempty(SUV_threshold)
     return;
 end
 L = bwlabeln(handles.Primary_image_obj.image_volume_data > SUV_threshold, 6);
@@ -1643,7 +1693,7 @@ for idx = 1:max(slice_now(:))
     end
 end
 
-if found_voxel == 0 
+if found_voxel == 0
     warndlg('The segmentation could not generate a mask with this SUV. No VOI generated.');
     return;
 end
@@ -1799,11 +1849,23 @@ if isempty(foldername) || ~isdir(foldername)
     return;
 end
 drawnow;
-pause(3);
+% pause(3);
 I = getframe(gcf);
+% temp1 = I.cdata;
+imwrite(I.cdata, fullfile(foldername, [filename_prefix '.tif']), 'Resolution', 600);
+return;
+% 
+% for idx = 1:3
+%     temp2 = temp1(:,:,idx);
+%     temp2 = cast(temp2, 'double');
+%     temp3 = interp2(temp2, 2);
+%     imgdata(:,:,idx) = temp3;
+% end
+%imwrite(I.cdata, fullfile(foldername, [filename_prefix '.tiff']), 'tiff', 'WriteMode', 'overwrite', 'Compression', 'none', 'Resolution', 12000);
+%imwrite(I.cdata, fullfile(foldername, [filename_prefix '.png']), 'png', 'WriteMode', 'overwrite', 'XResolution', 12000, 'YResolution', 12000);
+%imwrite(imgdata, fullfile(foldername, [filename_prefix '_high_res.tif']));
 
-imwrite(I.cdata, fullfile(foldername, [filename_prefix '.png']), 'WriteMode', 'overwrite');
-
+%print(gcf,'D:\temp\1.tif', '-dtiff', '-r600','-zbuffer');
 
 % --- Executes on button press in parametric_img_btn.
 function parametric_img_btn_Callback(hObject, eventdata, handles)
@@ -1812,7 +1874,7 @@ function parametric_img_btn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 %temp1 = parametric_FC(handles.Primary_image_obj.image_volume_data(:, :, 1:60));
 %if handles.VOI_loaded
-if handles.Primary_images_loaded 
+if handles.Primary_images_loaded
     paraimg_out = parametric_img_GUI(hObject, eventdata, handles);
 else
     warndlg('The primary images have not been loaded yet.');
@@ -1821,11 +1883,11 @@ end
 return;
 % mask_volume = handles.mask_volume;
 % mask_small = handles.mask_vol_for_TA{1}{1};
-% 
+%
 % resampled_vol = handles.resampled_image_vol_for_TA{1}{1};
-%     
+%
 % tempimg = handles.Primary_image_obj.image_volume_data(range{3}, range{2}, range{1}) .* mask(range{3}, range{2}, range{1});
-% 
+%
 
 
 %assignin('base', 'var1', var1)
@@ -1921,24 +1983,24 @@ handles.Let_VOI_decide_slice = 0;
 %     out1.x_location, out1.y_location, out1.z_location);
 
 % structure_length= length(handles.ROI_structure);
-% 
+%
 % for idx = 1:structure_length
 %     list{idx} =  handles.ROI_structure(idx).structureName;
 % end
-% 
+%
 % set(handles.listbox1, 'String', list);
-% 
+%
 % pix_Z = out1.pixelSpacing(3);
 % pix_X = out1.pixelSpacing(1);
 % loc1 = get(handles.coronal_axes, 'Position');
 % temp1 = pix_X * size(handles.CT_img,1)/pix_Z;
 % loc1 = [loc1(1:3) temp1];
 % set(handles.coronal_axes, 'Position', loc1);
-% 
+%
 % loc1 = get(handles.sagittal_axes, 'Position');
 % loc1 = [loc1(1:3) temp1];
 % set(handles.sagittal_axes, 'Position', loc1);
-% 
+%
 % handles.xV = out1.x_location;
 % handles.yV = out1.y_location;
 % handles.zV = out1.z_location;
@@ -2109,3 +2171,59 @@ function fusion_color_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pushbutton35.
+function pushbutton35_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton35 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton34.
+function pushbutton34_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton34 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton33.
+function pushbutton33_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton33 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in load_Fusion_Server.
+function load_Fusion_Server_Callback(hObject, eventdata, handles)
+% hObject    handle to load_Fusion_Server (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in load_Primary_Server.
+function load_Primary_Server_Callback(hObject, eventdata, handles)
+% hObject    handle to load_Primary_Server (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+filelist = dicom_qr_GUI;
+load_Primary_btn_Callback(handles.load_Primary_btn, eventdata, handles, filelist);
+return;
+
+
+% --- Executes when figure1 is resized.
+function figure1_ResizeFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+a=1;
+return;
+
+
+% --- Executes on button press in axes_aspect_ratio_checkbox.
+function axes_aspect_ratio_checkbox_Callback(hObject, eventdata, handles)
+% hObject    handle to axes_aspect_ratio_checkbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of axes_aspect_ratio_checkbox

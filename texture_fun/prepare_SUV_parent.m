@@ -7,12 +7,17 @@ function varargout = prepare_SUV_parent(varargin)
 % This function is the parent function for co-occurrence matrices
 img_in = varargin{1}; % Use the original masked image volume to compute the co-occurrence matrix
 img_obj = varargin{3};
+mask = varargin{4}.mask_vol_for_TA{varargin{5}}{varargin{6}};
 
 if exist('image_global') == 1
     clear image_global;
 end
 global image_global;
 image_global = img_in; % Should be in double already
+% global image_global_ni;
+% image_global_ni = img_in2;
+global mask_for_TA;
+mask_for_TA = mask;
 
 if exist('image_property') == 1
     clear image_property;
