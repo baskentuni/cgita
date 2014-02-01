@@ -18,9 +18,7 @@ If you just need to use built-in functions of CGITA, either mode is good. These 
 <font color="red"> * If you want to run CGITA as a stand-alone application, you must install the latest version of MCR on your computer. *</font> Go to [http://www.mathworks.com/products/compiler/mcr/index.html this Mathworks webpage] to download the MCR for your platform.  
 
 === Download the CGITA file you need === 
-After you have determined whether to run it under MATLAB or as an SAA, go to the [http://code.google.com/p/cgita/downloads/list download page] to get the file you need. 
-
-http://cgita.googlecode.com/svn/wiki/download_screen_1.png
+After you have determined whether to run it under MATLAB or as an SAA, go to the [https://sites.google.com/site/deanfanglab/software/software-download Download page] to get the file you need. 
 
 === Setting CGITA up under MATLAB === 
   # Uncompress the zip file 'CGITA_v1.0_matlab.zip' to a local drive on your computer. 
