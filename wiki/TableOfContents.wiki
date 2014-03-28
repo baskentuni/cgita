@@ -5,6 +5,5 @@
     * [Terms_CGITA CGITA terms]
   * *Documents*
     * [UserManual User manual in PDF]
-  * *Feedback*
-    * [Guestbook  Guestbook]
+
   
