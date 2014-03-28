@@ -1,6 +1,0 @@
-#summary CGITA guestbook
-#sidebar TableOfContents
-= Let us know what you think of CGITA! =
-== We would like to know how you think of CGITA. ==
-== So please leave your thoughts, comments, suggestions, etc... on this page. == 
-== Please leave your name and institution when you post. It would be very encouraging for us to know who are using CGITA. ==
