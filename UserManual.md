@@ -1,0 +1,1 @@
+Please go to http://code.google.com/p/cgita/downloads/list and download the latest version of the manual.
